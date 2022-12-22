@@ -1,6 +1,5 @@
 import { Show, createEffect, For } from "solid-js";
 import { setStore, store } from "./store";
-import debounce from "lodash.debounce";
 
 function DropZone() {
   const uploadFile = async (e) => {
@@ -52,11 +51,6 @@ function DropZone() {
 
 export default function Form() {
   let canvasRef;
-
-  createEffect(() => {
-    console.log(store.k);
-  });
-
   createEffect(() => {
     // update the canvas when the imagePreviewURL changes
     if (store.imagePreviewURL) {
@@ -78,44 +72,22 @@ export default function Form() {
     }
   });
 
-  const handleClick = async () => {
-    // create a new image from the canvas
-    const image = await new store.doxa.Image(
-      store.image.width,
-      store.image.height,
-      store.image.data
-    );
-    // create a binary image from the canvas
-    const binImage = store.doxa.Binarization.toBinary(
-      store.binarizationAlgorithms.OTSU,
-      image,
-      { window: 26, k: 0.1 }
-    );
-    // draw the binary image on the canvas
-    binImage.draw(canvasRef);
-    // free the memory
-    image.free();
-    binImage.free();
-  };
-
   const handleDownload = () => {
-    // get the image data from the canvas
     const imageData = canvasRef.toDataURL("image/png");
-    // create a link to download the image
     const link = document.createElement("a");
     link.href = imageData;
     link.download = store.fileName;
     link.click();
-    // free the memory
     link.remove();
   };
 
-  const handleInput = async (e) => {
+  const handleSelect = async (e) => {
     // get the selected algorithm from the select
     const selectedAlgorithm = e.target.value;
     // save the selected algorithm in the store
     setStore("selectedAlgorithm", selectedAlgorithm);
     // create a new image from the canvas
+    const start = performance.now();
     const image = await new store.doxa.Image(
       store.image.width,
       store.image.height,
@@ -132,41 +104,65 @@ export default function Form() {
     // free the memory
     image.free();
     binImage.free();
+    // record the execution time
+    const end = performance.now();
+    setStore("executionTime", end - start);
   };
 
-  const handleInput2 = async (e) => {
-    // get the selected algorithm from the select
-    const k = e.target.value;
-    // save the selected algorithm in the store
+  const handleChangeZ = async (e) => {
+    const k = Number(e.target.value);
     setStore("k", k);
-    // create a new image from the canvas
+    const start = performance.now();
     const image = await new store.doxa.Image(
       store.image.width,
       store.image.height,
       store.image.data
     );
-    // create a binary image from the canvas
-    console.log("binarizing image");
     const binImage = store.doxa.Binarization.toBinary(
       store.selectedAlgorithm,
       image,
       { window: store.windowSize, k: store.k }
     );
-    // draw the binary image on the canvas
+    // record the execution time
+    const end = performance.now();
+    setStore("executionTime", end - start);
     binImage.draw(canvasRef);
-    // free the memory
     image.free();
     binImage.free();
-    console.log("binarizing image done");
+  };
+
+  const handleChangeWindow = async (e) => {
+    const windowSize = Number(e.target.value);
+    setStore("windowSize", windowSize);
+    const start = performance.now();
+    const image = await new store.doxa.Image(
+      store.image.width,
+      store.image.height,
+      store.image.data
+    );
+    const binImage = store.doxa.Binarization.toBinary(
+      store.selectedAlgorithm,
+      image,
+      { window: store.windowSize, k: store.k }
+    );
+    // record the execution time
+    const end = performance.now();
+    setStore("executionTime", end - start);
+    binImage.draw(canvasRef);
+    image.free();
+    binImage.free();
   };
 
   return (
     <Show when={store.imagePreviewURL} fallback={<DropZone />}>
-      <div className="flex gap-4 flex-1">
+      <div className="flex flex-col sm:flex-row gap-4 flex-1">
         <img src={store.imagePreviewURL} className="max-w-md" />
         <canvas ref={canvasRef} className="max-w-md"></canvas>
       </div>
-      <div className="flex w-full gap-4 mt-10">
+      <p className="font-mono">
+        Binarization completed in {store.executionTime.toFixed(2)} ms
+      </p>
+      <div className="flex flex-col w-full gap-4 mt-10 max-w-xl">
         <div className="flex-1">
           <label
             htmlFor="select-input"
@@ -175,7 +171,7 @@ export default function Form() {
             Select an algorithm
           </label>
           <select
-            onInput={handleInput}
+            onInput={handleSelect}
             id="select-input"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           >
@@ -198,7 +194,7 @@ export default function Form() {
             type="number"
             min={0}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            onInput={(e) => setStore("windowSize", e.target.value)}
+            onInput={handleChangeWindow}
           />
         </div>
         <div>
@@ -215,9 +211,17 @@ export default function Form() {
             step={0.05}
             min={0}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            onChange={handleInput2}
+            onInput={handleChangeZ}
           />
         </div>
+        <button
+          class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300"
+          onClick={handleDownload}
+        >
+          <span class="relative w-full px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+            Download
+          </span>
+        </button>
       </div>
     </Show>
   );

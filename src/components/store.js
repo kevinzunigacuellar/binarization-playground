@@ -22,6 +22,7 @@ const [store, setStore] = createStore({
     Gatos: 11,
   },
   fileName: "",
+  executionTime: 0,
 });
 
 export { store, setStore };

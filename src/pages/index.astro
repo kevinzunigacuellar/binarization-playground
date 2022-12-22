@@ -1,5 +1,6 @@
 ---
 import Form from "../components/form";
+import { Icon } from "astro-icon";
 ---
 
 <!DOCTYPE html>
@@ -10,18 +11,23 @@ import Form from "../components/form";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Binarization playground</title>
   </head>
-  <body class="bg-gray-100 flex flex-col w-full h-full">
+  <body class="bg-white flex flex-col w-full h-full">
     <h1 class="text-3xl font-bold p-8 w-full text-center p">
       Image binarization playground
     </h1>
-    <main class="grow w-full flex justify-center items-start p-8">
+    <main class="grow w-full flex flex-col items-center p-8">
       <Form client:idle />
     </main>
     <footer
-      class="p-8 border-t w-full text-center shrink-1 flex justify-between text-gray-500"
+      class="p-8 w-full text-center shrink-1 flex justify-between items-center text-gray-500 bg-gray-100 gap-2"
     >
-      <p>Made with ❤️ at UVM by Dr. Schadler's Lab</p>
-      <p>GitHub</p>
+      <p class="text-left">Made with ❤️ at UVM by Dr. Schadler's Lab</p>
+      <a
+        class="hover:text-gray-800 flex gap-1"
+        href="https://github.com/kevinzunigacuellar/binarization-playground"
+      >
+        <Icon name="mdi:github" class="h-6" />GitHub</a
+      >
     </footer>
   </body>
   <script is:inline src="doxaWasm.js"></script>
