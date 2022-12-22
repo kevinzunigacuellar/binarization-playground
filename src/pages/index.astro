@@ -1,27 +1,37 @@
 ---
-import Form from "../components/uploadFiles";
+import Form from "../components/form";
 ---
-<!doctype html>
-<html lang="en-us">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
-		<title>Demo</title>
-	</head>
-	<body>
-        <Form client:load />
-		<canvas id="democanvas">
-			Sorry. Your browser does not support HTML5 canvas element.
-		</canvas>
 
-        <script is:inline src="doxaWasm.js"></script>
-        <script is:inline src="doxa.js"></script>
-        <script>
-            import { store, setStore } from "../components/store.js";
-            setStore("algorithm", Doxa);
-            // console.log(store);
-        </script>
-    </body>
+<!DOCTYPE html>
+<html lang="en" class="w-full h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Binarization playground</title>
+  </head>
+  <body class="bg-gray-100 flex flex-col w-full h-full">
+    <h1 class="text-3xl font-bold p-8 w-full text-center p">
+      Image binarization playground
+    </h1>
+    <main class="grow w-full flex justify-center items-start p-8">
+      <Form client:idle />
+    </main>
+    <footer
+      class="p-8 border-t w-full text-center shrink-1 flex justify-between text-gray-500"
+    >
+      <p>Made with ❤️ at UVM by Dr. Schadler's Lab</p>
+      <p>GitHub</p>
+    </footer>
+  </body>
+  <script is:inline src="doxaWasm.js"></script>
+  <script is:inline src="doxa.js"></script>
+  <script>
+    import { setStore } from "../components/store.js";
+    // load WASM
+    (() => {
+      // @ts-ignore
+      setStore("doxa", Doxa);
+    })();
+  </script>
 </html>
