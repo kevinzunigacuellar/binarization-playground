@@ -1,6 +1,7 @@
 ---
 import Form from "../components/form";
 import { Icon } from "astro-icon";
+import "@fontsource/inter/variable.css";
 ---
 
 <!DOCTYPE html>
@@ -12,24 +13,33 @@ import { Icon } from "astro-icon";
     <title>Binarization playground</title>
   </head>
   <body class="bg-white flex flex-col w-full h-full">
-    <h1 class="text-3xl font-bold p-8 w-full text-center p">
+    <h1 class="text-3xl font-bold p-8 w-full text-center">
       Image binarization playground
     </h1>
-    <main class="grow w-full flex flex-col items-center p-8">
+    <main class="grow w-full flex flex-col items-center px-8 pb-8">
       <Form client:idle />
     </main>
     <footer
       class="p-8 w-full text-center shrink-1 flex justify-between items-center text-gray-500 bg-gray-100 gap-2"
     >
       <p class="text-left">
-        Made with ❤️ at <a href="https://www.uvm.edu/" rel="nofollow">UVM</a> by
-        Dr. Schadler's Lab
+        Made with ❤️ at <a
+          href="https://www.uvm.edu/"
+          rel="nofollow"
+          class="hover:underline font-semibold underline-offset-2 decoration-wavy decoration-emerald-500 text-emerald-500"
+          >UVM</a
+        > by
+        <a
+          href="https://blog.uvm.edu/lsf/the-mechanical-dielectric-and-optical-properties-of-nanocomposites/"
+          class="hover:underline font-semibold underline-offset-2 decoration-wavy decoration-indigo-500 text-indigo-500"
+          >Dr. Schadler's Lab</a
+        >
       </p>
       <a
-        class="hover:text-gray-800 flex gap-1"
+        class="hover:text-gray-800 flex gap-1 font-semibold"
         href="https://github.com/kevinzunigacuellar/binarization-playground"
       >
-        <Icon name="mdi:github" class="h-6" />GitHub</a
+        <Icon name="github" class="w-6 fill-current" />GitHub</a
       >
     </footer>
   </body>
