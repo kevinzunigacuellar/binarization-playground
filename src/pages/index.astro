@@ -1,7 +1,7 @@
 ---
-import Form from "../components/form";
 import { Icon } from "astro-icon";
 import "@fontsource/inter/variable.css";
+import Playground from "../components/Playground";
 ---
 
 <!DOCTYPE html>
@@ -13,30 +13,27 @@ import "@fontsource/inter/variable.css";
     <title>Binarization playground</title>
   </head>
   <body class="bg-white flex flex-col w-full h-full">
-    <h1 class="text-3xl font-bold p-8 w-full text-center mt-8 mb-4">
-      Image binarization playground
-    </h1>
-    <main class="grow w-full flex flex-col items-center px-8 pb-8">
-      <Form client:idle />
+    <main class="grow w-full flex flex-col items-center bg-zinc-800">
+      <Playground client:idle />
     </main>
     <footer
-      class="p-8 w-full text-center shrink-1 flex justify-between items-center text-gray-500 bg-gray-100 gap-2"
+      class="p-8 w-full border-t border-zinc-700 text-center shrink-1 flex justify-between items-center text-zinc-400 bg-zinc-900 gap-2"
     >
       <p class="text-left">
         Made with ❤️ at <a
           href="https://www.uvm.edu/"
           rel="nofollow"
-          class="hover:underline font-semibold underline-offset-2 decoration-wavy decoration-emerald-500 text-emerald-500"
+          class="hover:underline font-semibold underline-offset-2 decoration-wavy decoration-emerald-400 text-emerald-400"
           >UVM</a
         > by
         <a
           href="https://blog.uvm.edu/lsf/the-mechanical-dielectric-and-optical-properties-of-nanocomposites/"
-          class="hover:underline font-semibold underline-offset-2 decoration-wavy decoration-indigo-500 text-indigo-500"
+          class="hover:underline font-semibold underline-offset-2 decoration-wavy decoration-indigo-400 text-indigo-400"
           >Dr. Schadler's Lab</a
         >
       </p>
       <a
-        class="hover:text-gray-800 flex gap-1"
+        class="hover:text-zinc-300 flex gap-2"
         href="https://github.com/kevinzunigacuellar/binarization-playground"
       >
         <Icon name="github" class="w-6 fill-current" />GitHub</a
