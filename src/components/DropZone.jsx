@@ -12,8 +12,11 @@ export default function DropZone() {
   return (
     <label
       htmlFor="dropzone-file"
-      class="flex flex-col items-center justify-center w-full h-full cursor-pointer bg-zinc-900"
+      class="flex flex-col w-full h-full bg-zinc-900 items-center justify-center cursor-pointer"
     >
+      <h1 className="bg-gradient-to-r px-4 text-center from-indigo-400 text-transparent bg-clip-text via-purple-500 to-pink-500 text-2xl mb-8 font-semibold">
+        Image binarization playground
+      </h1>
       <svg
         aria-hidden="true"
         class="w-12 h-12 mb-3 text-gray-400"
@@ -33,7 +36,7 @@ export default function DropZone() {
         <span class="font-semibold text-gray-300">Click to upload</span> or drag
         and drop
       </p>
-      <p class="text-xs text-gray-500">PNG, JPG, JPEG</p>
+      <p class="text-xs text-gray-400">PNG, JPG, JPEG</p>
 
       <input
         id="dropzone-file"
