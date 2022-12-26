@@ -12,7 +12,7 @@ export default function DropZone() {
   return (
     <label
       htmlFor="dropzone-file"
-      class="flex flex-col items-center justify-center w-full h-full cursor-pointer bg-zinc-800"
+      class="flex flex-col items-center justify-center w-full h-full cursor-pointer bg-zinc-900"
     >
       <svg
         aria-hidden="true"

@@ -24,7 +24,7 @@ export default function ImageSlider({ setCanvas, canvas }) {
   });
 
   return (
-    <div class="w-full h-full flex justify-center items-center">
+    <div class="w-full h-full flex justify-center items-center bg-zinc-900">
       <div class="relative flex max-w-3xl">
         <img
           class="h-full object-cover object-left absolute top-0"
@@ -37,19 +37,17 @@ export default function ImageSlider({ setCanvas, canvas }) {
         />
 
         <div
-          class="absolute h-full w-1 bg-pink-500 -translate-x-1/2"
+          class="absolute h-full w-0.5 bg-zinc-900 -translate-x-1/2"
           style={{ left: `${position()}%` }}
         ></div>
         <div
-          class="absolute top-1/2 w-20 h-20 text-pink-500 -translate-x-1/2 -translate-y-1/2 rotate-90"
+          class="absolute top-1/2 w-20 h-20 text-zinc-900 -translate-x-1/2 -translate-y-1/2 rotate-90"
           style={{ left: `${position()}%` }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
+            className="stroke-current stroke-1 fill-none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
           >
             <path
               stroke-linecap="round"

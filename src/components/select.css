@@ -10,7 +10,7 @@
 }
 
 .custom .solid-select-list {
-  @apply py-1 bg-zinc-700/50 mt-1 rounded-md text-sm text-zinc-500;
+  @apply py-1 bg-zinc-700/50 mt-2 rounded-md text-sm text-zinc-400;
 }
 
 .custom .solid-select-option {

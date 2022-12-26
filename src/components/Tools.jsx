@@ -96,7 +96,7 @@ export default function Tools({ canvas }) {
     binImage.free();
   };
   return (
-    <div className="w-full sm:w-72 h-full p-4 bg-zinc-900 flex flex-col gap-2 order-2 sm:order-none">
+    <div className="w-full sm:w-72 h-full p-4 sm:border-r border-zinc-700 bg-zinc-800 flex flex-col gap-2 order-2 sm:order-none">
       {/* <label
         htmlFor="select-input"
         class="block mb-1 text-sm font-medium text-zinc-400"
