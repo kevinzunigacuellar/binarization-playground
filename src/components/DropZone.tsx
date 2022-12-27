@@ -1,20 +1,12 @@
 import { setStore } from "@scripts/store";
 
 export default function DropZone() {
-  const uploadFile = async (e) => {
-    const [image] = e.target.files;
-    const fileName = image.name;
-    const imagePreview = URL.createObjectURL(image);
-    setStore("imagePreviewURL", imagePreview);
-    setStore("fileName", fileName);
-  };
-
   return (
     <label
-      htmlFor="dropzone-file"
+      for="dropzone-file"
       class="flex flex-col w-full h-full bg-zinc-900 items-center justify-center cursor-pointer"
     >
-      <h1 className="bg-gradient-to-r px-4 text-center from-indigo-400 text-transparent bg-clip-text via-purple-500 to-pink-500 text-2xl mb-8 font-semibold">
+      <h1 class="bg-gradient-to-r px-4 text-center from-indigo-400 text-transparent bg-clip-text via-purple-500 to-pink-500 text-2xl mb-8 font-semibold">
         Image binarization playground
       </h1>
       <svg
@@ -42,8 +34,23 @@ export default function DropZone() {
         id="dropzone-file"
         type="file"
         class="hidden"
-        onChange={uploadFile}
+        multiple={false}
         accept="image/*"
+        onChange={(e) => {
+          {
+            const files = e.currentTarget.files;
+            if (!files) return;
+            const image = files.item(0);
+            if (!image?.type.startsWith("image/")) {
+              alert("Please select an image file");
+              return;
+            }
+            const fileName = image.name;
+            const imagePreview = URL.createObjectURL(image);
+            setStore("imagePreviewURL", imagePreview);
+            setStore("fileName", fileName);
+          }
+        }}
       />
     </label>
   );
