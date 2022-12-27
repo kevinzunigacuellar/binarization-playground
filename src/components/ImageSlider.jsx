@@ -1,5 +1,5 @@
 import { createSignal, createEffect } from "solid-js";
-import { store, setStore } from "./store";
+import { store, setStore } from "@scripts/store";
 
 const INITIAL_POSITION = 50;
 

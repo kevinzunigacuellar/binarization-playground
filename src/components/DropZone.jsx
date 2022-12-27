@@ -1,4 +1,4 @@
-import { setStore } from "./store";
+import { setStore } from "@scripts/store";
 
 export default function DropZone() {
   const uploadFile = async (e) => {

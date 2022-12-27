@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js";
-import DropZone from "./DropZone";
-import ImageSlider from "./ImageSlider";
-import Tools from "./Tools";
-import { store } from "./store";
+import DropZone from "@components/DropZone";
+import ImageSlider from "@components/ImageSlider";
+import Tools from "@components/Tools";
+import { store } from "@scripts/store";
 
 export default function Playground() {
   const [canvas, setCanvas] = createSignal(null);
@@ -14,9 +14,5 @@ export default function Playground() {
         <ImageSlider setCanvas={setCanvas} canvas={canvas} />
       </section>
     </Show>
-    // <section className="flex w-full h-full">
-    //   <Tools canvas={canvas} />
-    //   <ImageSlider setCanvas={setCanvas} canvas={canvas} />
-    // </section>
   );
 }

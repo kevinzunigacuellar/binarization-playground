@@ -1,4 +1,4 @@
-import { store, setStore } from "./store";
+import { store, setStore } from "@scripts/store";
 import { Select } from "@thisbeyond/solid-select";
 import "./select.css";
 
