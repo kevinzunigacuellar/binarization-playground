@@ -3,15 +3,23 @@ import { store, setStore } from "@scripts/store";
 
 const INITIAL_POSITION = 50;
 
-export default function ImageSlider({ setCanvas, canvas }) {
+interface ImageSliderProps {
+  canvas: () => HTMLCanvasElement;
+  setCanvas: (canvas: HTMLCanvasElement) => void;
+}
+
+export default function ImageSlider({ setCanvas, canvas }: ImageSliderProps) {
   const [position, setPosition] = createSignal(INITIAL_POSITION);
 
   createEffect(() => {
     if (store.imagePreviewURL) {
-      const ctx = canvas().getContext("2d");
+      const ctx = canvas().getContext("2d", {
+        willReadFrequently: true,
+      });
+      if (!ctx) return;
       const img = new Image();
       img.src = store.imagePreviewURL;
-      img.onload = function () {
+      img.onload = () => {
         canvas().width = img.width;
         canvas().height = img.height;
         ctx.drawImage(img, 0, 0);
@@ -46,7 +54,7 @@ export default function ImageSlider({ setCanvas, canvas }) {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current stroke-1 fill-none"
+            class="stroke-current stroke-1 fill-none"
             viewBox="0 0 24 24"
           >
             <path
