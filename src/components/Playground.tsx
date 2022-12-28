@@ -8,7 +8,7 @@ export default function Playground() {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
 
   return (
-    <Show when={store.imagePreviewURL} fallback={<DropZone />}>
+    <Show when={store.imagePreviewURL} fallback={<DropZone canvas={canvas} />}>
       <section class="flex flex-col sm:flex-row w-full h-full">
         <Tools canvas={canvas} />
         <ImageSlider setCanvas={setCanvas} canvas={canvas} />

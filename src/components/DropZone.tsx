@@ -1,6 +1,11 @@
 import { setStore } from "@scripts/store";
+import type { Accessor } from "solid-js";
 
-export default function DropZone() {
+export default function DropZone({
+  canvas,
+}: {
+  canvas: Accessor<HTMLCanvasElement | undefined>;
+}) {
   return (
     <label
       for="dropzone-file"
@@ -46,9 +51,27 @@ export default function DropZone() {
               return;
             }
             const fileName = image.name;
-            const imagePreview = URL.createObjectURL(image);
-            setStore("imagePreviewURL", imagePreview);
+            const imagePreviewURL = URL.createObjectURL(image);
+            setStore("imagePreviewURL", imagePreviewURL);
             setStore("fileName", fileName);
+
+            const context = canvas().getContext("2d", {
+              willReadFrequently: true,
+            });
+
+            if (!context) return;
+            const img = new Image();
+            img.src = imagePreviewURL;
+            img.onload = () => {
+              (canvas() as HTMLCanvasElement).width = img.width;
+              (canvas() as HTMLCanvasElement).height = img.height;
+              context.drawImage(img, 0, 0);
+              const image = context.getImageData(0, 0, img.width, img.height);
+              setStore("image", "data", image.data);
+              setStore("image", "width", image.width);
+              setStore("image", "height", image.height);
+              img.remove();
+            };
           }
         }}
       />

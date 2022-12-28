@@ -1,5 +1,5 @@
-import { createSignal, createEffect, Setter, Accessor } from "solid-js";
-import { store, setStore } from "@scripts/store";
+import { createSignal, Setter, Accessor } from "solid-js";
+import { store } from "@scripts/store";
 
 const INITIAL_POSITION = 50;
 
@@ -10,26 +10,6 @@ interface ImageSliderProps {
 
 export default function ImageSlider({ setCanvas, canvas }: ImageSliderProps) {
   const [position, setPosition] = createSignal(INITIAL_POSITION);
-
-  createEffect(() => {
-    if (!store.imagePreviewURL) return;
-    const ctx = canvas()?.getContext("2d", {
-      willReadFrequently: true,
-    });
-    if (!ctx) return;
-    const img = new Image();
-    img.src = store.imagePreviewURL;
-    img.onload = () => {
-      (canvas() as HTMLCanvasElement).width = img.width;
-      (canvas() as HTMLCanvasElement).height = img.height;
-      ctx.drawImage(img, 0, 0);
-      const image = ctx.getImageData(0, 0, img.width, img.height);
-      setStore("image", "data", image.data);
-      setStore("image", "width", image.width);
-      setStore("image", "height", image.height);
-      img.remove();
-    };
-  });
 
   return (
     <div class="w-full h-full flex justify-center items-center bg-zinc-900">
