@@ -1,34 +1,34 @@
-import { createSignal, createEffect } from "solid-js";
+import { createSignal, createEffect, Setter, Accessor } from "solid-js";
 import { store, setStore } from "@scripts/store";
 
 const INITIAL_POSITION = 50;
 
 interface ImageSliderProps {
-  canvas: () => HTMLCanvasElement;
-  setCanvas: (canvas: HTMLCanvasElement) => void;
+  canvas: Accessor<HTMLCanvasElement | undefined>;
+  setCanvas: Setter<HTMLCanvasElement | undefined>;
 }
 
 export default function ImageSlider({ setCanvas, canvas }: ImageSliderProps) {
   const [position, setPosition] = createSignal(INITIAL_POSITION);
 
   createEffect(() => {
-    if (store.imagePreviewURL) {
-      const ctx = canvas().getContext("2d", {
-        willReadFrequently: true,
-      });
-      if (!ctx) return;
-      const img = new Image();
-      img.src = store.imagePreviewURL;
-      img.onload = () => {
-        canvas().width = img.width;
-        canvas().height = img.height;
-        ctx.drawImage(img, 0, 0);
-        setStore(
-          "image",
-          ctx.getImageData(0, 0, canvas().width, canvas().height)
-        );
-      };
-    }
+    if (!store.imagePreviewURL) return;
+    const ctx = canvas()?.getContext("2d", {
+      willReadFrequently: true,
+    });
+    if (!ctx) return;
+    const img = new Image();
+    img.src = store.imagePreviewURL;
+    img.onload = () => {
+      (canvas() as HTMLCanvasElement).width = img.width;
+      (canvas() as HTMLCanvasElement).height = img.height;
+      ctx.drawImage(img, 0, 0);
+      const image = ctx.getImageData(0, 0, img.width, img.height);
+      setStore("image", "data", image.data);
+      setStore("image", "width", image.width);
+      setStore("image", "height", image.height);
+      img.remove();
+    };
   });
 
   return (
@@ -72,7 +72,8 @@ export default function ImageSlider({ setCanvas, canvas }: ImageSliderProps) {
           min="0"
           max="100"
           onInput={(e) => {
-            setPosition(e.currentTarget.value);
+            const position = e.currentTarget.value;
+            setPosition(+position);
           }}
         />
       </div>

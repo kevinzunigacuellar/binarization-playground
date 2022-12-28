@@ -1,7 +1,11 @@
 import { createStore } from "solid-js/store";
 
 const [store, setStore] = createStore({
-  image: null,
+  image: {
+    height: 0,
+    width: 0,
+    data: new Uint8ClampedArray(),
+  },
   selectedAlgorithm: null,
   imagePreviewURL: "",
   doxa: null,
