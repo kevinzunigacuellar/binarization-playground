@@ -1,27 +1,14 @@
-import { createSignal, createEffect } from "solid-js";
-import { store, setStore } from "./store";
+import { createSignal, Setter } from "solid-js";
+import { store } from "@scripts/store";
 
 const INITIAL_POSITION = 50;
 
-export default function ImageSlider({ setCanvas, canvas }) {
-  const [position, setPosition] = createSignal(INITIAL_POSITION);
+interface ImageSliderProps {
+  setCanvas: Setter<HTMLCanvasElement | undefined>;
+}
 
-  createEffect(() => {
-    if (store.imagePreviewURL) {
-      const ctx = canvas().getContext("2d");
-      const img = new Image();
-      img.src = store.imagePreviewURL;
-      img.onload = function () {
-        canvas().width = img.width;
-        canvas().height = img.height;
-        ctx.drawImage(img, 0, 0);
-        setStore(
-          "image",
-          ctx.getImageData(0, 0, canvas().width, canvas().height)
-        );
-      };
-    }
-  });
+export default function ImageSlider({ setCanvas }: ImageSliderProps) {
+  const [position, setPosition] = createSignal(INITIAL_POSITION);
 
   return (
     <div class="w-full h-full flex justify-center items-center bg-zinc-900">
@@ -46,7 +33,7 @@ export default function ImageSlider({ setCanvas, canvas }) {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current stroke-1 fill-none"
+            class="stroke-current stroke-1 fill-none"
             viewBox="0 0 24 24"
           >
             <path
@@ -64,7 +51,8 @@ export default function ImageSlider({ setCanvas, canvas }) {
           min="0"
           max="100"
           onInput={(e) => {
-            setPosition(e.currentTarget.value);
+            const position = e.currentTarget.value;
+            setPosition(+position);
           }}
         />
       </div>
