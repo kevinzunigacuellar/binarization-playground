@@ -1,11 +1,11 @@
 import { setStore } from "@scripts/store";
 import type { Accessor } from "solid-js";
 
-export default function DropZone({
-  canvas,
-}: {
+interface DropZoneProps {
   canvas: Accessor<HTMLCanvasElement | undefined>;
-}) {
+}
+
+export default function DropZone({ canvas }: DropZoneProps) {
   return (
     <label
       for="dropzone-file"
@@ -55,7 +55,7 @@ export default function DropZone({
             setStore("imagePreviewURL", imagePreviewURL);
             setStore("fileName", fileName);
 
-            const context = canvas().getContext("2d", {
+            const context = (canvas() as HTMLCanvasElement).getContext("2d", {
               willReadFrequently: true,
             });
 

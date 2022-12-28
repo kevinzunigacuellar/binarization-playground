@@ -1,14 +1,13 @@
-import { createSignal, Setter, Accessor } from "solid-js";
+import { createSignal, Setter } from "solid-js";
 import { store } from "@scripts/store";
 
 const INITIAL_POSITION = 50;
 
 interface ImageSliderProps {
-  canvas: Accessor<HTMLCanvasElement | undefined>;
   setCanvas: Setter<HTMLCanvasElement | undefined>;
 }
 
-export default function ImageSlider({ setCanvas, canvas }: ImageSliderProps) {
+export default function ImageSlider({ setCanvas }: ImageSliderProps) {
   const [position, setPosition] = createSignal(INITIAL_POSITION);
 
   return (
