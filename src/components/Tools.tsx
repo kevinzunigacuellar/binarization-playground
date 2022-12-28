@@ -17,16 +17,16 @@ export default function Tools({
     link.remove();
   };
 
-  const handleSelect = async (e) => {
+  const handleSelect = async (e: any) => {
     const selectedAlgorithm = e.target.value;
     setStore("selectedAlgorithm", selectedAlgorithm);
     const start = performance.now();
-    const image = await new store.doxa.Image(
+    const image = await new (store.doxa as any).Image(
       store.image.width,
       store.image.height,
       store.image.data
     );
-    const binImage = store.doxa.Binarization.toBinary(
+    const binImage = (store.doxa as any).Binarization.toBinary(
       selectedAlgorithm,
       image,
       { window: store.windowSize, k: store.k }
@@ -38,16 +38,17 @@ export default function Tools({
     setStore("executionTime", end - start);
   };
 
-  const handleSelect2 = async (e) => {
+  const handleSelect2 = async (e: any) => {
+    // @ts-ignore
     const selectedAlgorithm = store.binarizationAlgorithms[e];
     setStore("selectedAlgorithm", selectedAlgorithm);
     const start = performance.now();
-    const image = await new store.doxa.Image(
+    const image = await new (store.doxa as any).Image(
       store.image.width,
       store.image.height,
       store.image.data
     );
-    const binImage = store.doxa.Binarization.toBinary(
+    const binImage = (store.doxa as any).Binarization.toBinary(
       selectedAlgorithm,
       image,
       { window: store.windowSize, k: store.k }
@@ -59,16 +60,16 @@ export default function Tools({
     setStore("executionTime", end - start);
   };
 
-  const handleChangeZ = async (e) => {
+  const handleChangeZ = async (e: any) => {
     const k = Number(e.target.value);
     setStore("k", k);
     const start = performance.now();
-    const image = await new store.doxa.Image(
+    const image = await new (store.doxa as any).Image(
       store.image.width,
       store.image.height,
       store.image.data
     );
-    const binImage = store.doxa.Binarization.toBinary(
+    const binImage = (store.doxa as any).Binarization.toBinary(
       store.selectedAlgorithm,
       image,
       { window: store.windowSize, k: store.k }
@@ -80,16 +81,16 @@ export default function Tools({
     binImage.free();
   };
 
-  const handleChangeWindow = async (e) => {
+  const handleChangeWindow = async (e: any) => {
     const windowSize = Number(e.target.value);
     setStore("windowSize", windowSize);
     const start = performance.now();
-    const image = await new store.doxa.Image(
+    const image = await new (store.doxa as any).Image(
       store.image.width,
       store.image.height,
       store.image.data
     );
-    const binImage = store.doxa.Binarization.toBinary(
+    const binImage = (store.doxa as any).Binarization.toBinary(
       store.selectedAlgorithm,
       image,
       { window: store.windowSize, k: store.k }
