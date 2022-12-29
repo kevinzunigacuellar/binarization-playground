@@ -80,6 +80,7 @@ export default function Tools({ canvas }: ToolsProps) {
           id="window-size"
           value={store.parameters.window}
           type="number"
+          step={5}
           min={0}
           class="bg-zinc-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-zinc-400 text-sm rounded-lg block w-full p-2 border-0 appearance-none"
           onInput={async (e) => {
