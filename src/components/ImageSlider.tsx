@@ -1,4 +1,4 @@
-import { createSignal, Setter } from "solid-js";
+import { createSignal, Setter, createEffect } from "solid-js";
 import { store } from "@scripts/store";
 
 const INITIAL_POSITION = 50;
@@ -9,10 +9,24 @@ interface ImageSliderProps {
 
 export default function ImageSlider({ setCanvas }: ImageSliderProps) {
   const [position, setPosition] = createSignal(INITIAL_POSITION);
+  const [scale, setScale] = createSignal(1);
 
   return (
-    <div class="w-full h-full flex justify-center items-center bg-zinc-900">
-      <div class="relative flex max-w-3xl">
+    <div class="w-full h-full overflow-hidden flex justify-center items-center bg-zinc-900">
+      <div
+        class="relative flex max-w-3xl"
+        onWheel={(e) => {
+          const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
+          const newScale = scale() * zoomFactor;
+          // prevents zooming in/out too much
+          if (newScale < 0.2 || newScale > 2) return;
+
+          setScale((prevScale) => {
+            return prevScale * zoomFactor;
+          });
+        }}
+        style={{ transform: `scale(${scale()})` }}
+      >
         <img
           class="h-full object-cover object-left absolute top-0"
           style={{ width: `${position()}%` }}
