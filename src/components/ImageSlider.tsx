@@ -16,7 +16,7 @@ export default function ImageSlider({ setCanvas }: ImageSliderProps) {
         <img
           class="h-full object-cover object-left absolute top-0"
           style={{ width: `${position()}%` }}
-          src={store.imagePreviewURL}
+          src={store.imageData.previewUrl}
         />
         <canvas
           class="w-full h-full object-cover object-left"
