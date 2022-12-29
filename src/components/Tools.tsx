@@ -156,6 +156,11 @@ export default function Tools({ canvas }: ToolsProps) {
       >
         Download
       </button>
+      <Show when={store.executionTime > 0}>
+        <p class="font-mono text-sm text-white">
+          Generated in {store.executionTime.toFixed(2)} ms
+        </p>
+      </Show>
     </div>
   );
 }
