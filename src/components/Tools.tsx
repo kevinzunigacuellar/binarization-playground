@@ -90,7 +90,48 @@ export default function Tools({ canvas }: ToolsProps) {
           }}
         />
       </Show>
-      <Show when={store.selectedAlgorithm.parameters.window}>
+      <Show when={store.selectedAlgorithm.parameters.threshold}>
+        <label for="threshold" class="block text-sm font-medium text-zinc-400">
+          Threshold
+        </label>
+        <input
+          id="threshold"
+          value={store.parameters.threshold}
+          type="number"
+          min={0}
+          step={10}
+          class="bg-zinc-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-zinc-400 text-sm rounded-lg block w-full p-2 border-0 appearance-none"
+          onInput={async (e) => {
+            const threshold = e.currentTarget.valueAsNumber;
+            setStore("parameters", "threshold", threshold);
+            const time = await binarize(canvas);
+            setStore("executionTime", time);
+          }}
+        />
+      </Show>
+      <Show when={store.selectedAlgorithm.parameters["contrast-limit"]}>
+        <label
+          for="contrastLimit"
+          class="block text-sm font-medium text-zinc-400"
+        >
+          Contrast Limit
+        </label>
+        <input
+          id="contrastLimit"
+          value={store.parameters["contrast-limit"]}
+          type="number"
+          min={0}
+          step={5}
+          class="bg-zinc-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-zinc-400 text-sm rounded-lg block w-full p-2 border-0 appearance-none"
+          onInput={async (e) => {
+            const contrastLimit = e.currentTarget.valueAsNumber;
+            setStore("parameters", "contrast-limit", contrastLimit);
+            const time = await binarize(canvas);
+            setStore("executionTime", time);
+          }}
+        />
+      </Show>
+      <Show when={store.selectedAlgorithm.parameters.k}>
         <label for="k-value" class="block text-sm font-medium text-zinc-400">
           k value
         </label>
@@ -98,7 +139,7 @@ export default function Tools({ canvas }: ToolsProps) {
           id="k-value"
           value={store.parameters.k}
           type="number"
-          step={0.02}
+          step={0.05}
           min={0}
           class="bg-zinc-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-zinc-400 text-sm rounded-lg block w-full p-2 border-0 appearance-none"
           onInput={async (e) => {
