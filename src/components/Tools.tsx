@@ -3,6 +3,30 @@ import { Select } from "@thisbeyond/solid-select";
 import { Accessor, Show } from "solid-js";
 import "./select.css";
 
+async function binarize(canvas: Accessor<HTMLCanvasElement | undefined>) {
+  const start = performance.now();
+  const image = await new (store.doxa as any).Image(
+    store.imageData.width,
+    store.imageData.height,
+    store.imageData.data
+  );
+  const binImage = (store.doxa as any).Binarization.toBinary(
+    store.selectedAlgorithm.id,
+    image,
+    {
+      window: store.parameters.window,
+      k: store.parameters.k,
+      threshold: store.parameters.threshold,
+      "contrast-limit": store.parameters["contrast-limit"],
+    }
+  );
+  binImage.draw(canvas());
+  image.free();
+  binImage.free();
+  const end = performance.now();
+  return end - start;
+}
+
 interface ToolsProps {
   canvas: Accessor<HTMLCanvasElement | undefined>;
 }
@@ -23,76 +47,13 @@ export default function Tools({ canvas }: ToolsProps) {
     const selectedAlgorithmIdx = store.binarizationAlgorithms[option].id;
     const selectedAlgorithmParams =
       store.binarizationAlgorithms[option].parameters;
-
     setStore("selectedAlgorithm", "id", selectedAlgorithmIdx);
     setStore("selectedAlgorithm", "name", option);
     setStore("selectedAlgorithm", "parameters", selectedAlgorithmParams);
-
-    const start = performance.now();
-    const image = await new (store.doxa as any).Image(
-      store.imageData.width,
-      store.imageData.height,
-      store.imageData.data
-    );
-    const binImage = (store.doxa as any).Binarization.toBinary(
-      selectedAlgorithmIdx,
-      image,
-      {
-        window: store.parameters.window,
-        k: store.parameters.k,
-        threshold: store.parameters.threshold,
-        "contrast-limit": store.parameters["contrast-limit"],
-      }
-    );
-    binImage.draw(canvas());
-    image.free();
-    binImage.free();
-    const end = performance.now();
-    console.log(end - start);
-    setStore("executionTime", end - start);
+    const time = await binarize(canvas);
+    setStore("executionTime", time);
   };
 
-  const handleChangeZ = async (e: any) => {
-    // const k = Number(e.target.value);
-    // setStore("k", k);
-    // const start = performance.now();
-    // const image = await new (store.doxa as any).Image(
-    //   store.image.width,
-    //   store.image.height,
-    //   store.image.data
-    // );
-    // const binImage = (store.doxa as any).Binarization.toBinary(
-    //   store.selectedAlgorithm,
-    //   image,
-    //   { window: store.windowSize, k: store.k }
-    // );
-    // const end = performance.now();
-    // setStore("executionTime", end - start);
-    // binImage.draw(canvas());
-    // image.free();
-    // binImage.free();
-  };
-
-  const handleChangeWindow = async (e: any) => {
-    // const windowSize = Number(e.target.value);
-    // setStore("windowSize", windowSize);
-    // const start = performance.now();
-    // const image = await new (store.doxa as any).Image(
-    //   store.image.width,
-    //   store.image.height,
-    //   store.image.data
-    // );
-    // const binImage = (store.doxa as any).Binarization.toBinary(
-    //   store.selectedAlgorithm,
-    //   image,
-    //   { window: store.windowSize, k: store.k }
-    // );
-    // const end = performance.now();
-    // setStore("executionTime", end - start);
-    // binImage.draw(canvas());
-    // image.free();
-    // binImage.free();
-  };
   return (
     <div class="w-full sm:w-72 h-full p-4 sm:border-r border-zinc-700 bg-zinc-800 flex flex-col gap-2 order-2 sm:order-none">
       <label
@@ -121,7 +82,12 @@ export default function Tools({ canvas }: ToolsProps) {
           type="number"
           min={0}
           class="bg-zinc-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-zinc-400 text-sm rounded-lg block w-full p-2 border-0 appearance-none"
-          onInput={handleChangeWindow}
+          onInput={async (e) => {
+            const windowSize = e.currentTarget.valueAsNumber;
+            setStore("parameters", "window", windowSize);
+            const time = await binarize(canvas);
+            setStore("executionTime", time);
+          }}
         />
       </Show>
       <Show when={store.selectedAlgorithm.parameters.window}>
@@ -135,7 +101,12 @@ export default function Tools({ canvas }: ToolsProps) {
           step={0.02}
           min={0}
           class="bg-zinc-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-zinc-400 text-sm rounded-lg block w-full p-2 border-0 appearance-none"
-          onInput={handleChangeZ}
+          onInput={async (e) => {
+            const k = e.currentTarget.valueAsNumber;
+            setStore("parameters", "k", k);
+            const time = await binarize(canvas);
+            setStore("executionTime", time);
+          }}
         />
       </Show>
       <button
