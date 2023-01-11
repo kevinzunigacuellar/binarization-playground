@@ -1,30 +1,7 @@
 import { store, setStore } from "@scripts/store";
 import { Accessor, Show, For } from "solid-js";
-import { Select } from "@kobalte/core";
-
-async function binarize(canvas: Accessor<HTMLCanvasElement | undefined>) {
-  const start = performance.now();
-  const image = await new (store.doxa as any).Image(
-    store.imageData.width,
-    store.imageData.height,
-    store.imageData.data
-  );
-  const binImage = (store.doxa as any).Binarization.toBinary(
-    store.selectedAlgorithm.id,
-    image,
-    {
-      window: store.parameters.window,
-      k: store.parameters.k,
-      threshold: store.parameters.threshold,
-      "contrast-limit": store.parameters["contrast-limit"],
-    }
-  );
-  binImage.draw(canvas());
-  image.free();
-  binImage.free();
-  const end = performance.now();
-  return end - start;
-}
+import { Select, HoverCard } from "@kobalte/core";
+import { binarize } from "@scripts/utils";
 
 interface ToolsProps {
   canvas: Accessor<HTMLCanvasElement | undefined>;
@@ -83,7 +60,7 @@ export default function Tools({ canvas }: ToolsProps) {
         </Select.Trigger>
         <Select.Portal>
           <Select.Content class="bg-zinc-800 border-zinc-700 border rounded-lg py-1">
-            <Select.Listbox class="">
+            <Select.Listbox>
               <For each={Object.keys(store.binarizationAlgorithms)}>
                 {(algorithm) => (
                   <Select.Item
@@ -115,12 +92,36 @@ export default function Tools({ canvas }: ToolsProps) {
         </Select.Portal>
       </Select>
       <Show when={store.selectedAlgorithm.parameters.window}>
-        <label
-          for="window-size"
-          class="block text-sm font-medium text-zinc-400"
-        >
-          Window size
-        </label>
+        <div class="text-sm text-zinc-400 flex gap-1 items-center">
+          <label for="window-size" class="block font-medium">
+            Window size
+          </label>
+          <HoverCard openDelay={300} gutter={5}>
+            <HoverCard.Trigger>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+                />
+              </svg>
+            </HoverCard.Trigger>
+            <HoverCard.Portal>
+              <HoverCard.Content>
+                <p class="bg-zinc-900 max-w-md p-4 rounded-md text-zinc-400 border border-zinc-600">
+                  Number of pixels that will be used to calculate the threshold.
+                </p>
+              </HoverCard.Content>
+            </HoverCard.Portal>
+          </HoverCard>
+        </div>
         <input
           id="window-size"
           value={store.parameters.window}
@@ -137,9 +138,37 @@ export default function Tools({ canvas }: ToolsProps) {
         />
       </Show>
       <Show when={store.selectedAlgorithm.parameters.threshold}>
-        <label for="threshold" class="block text-sm font-medium text-zinc-400">
-          Threshold
-        </label>
+        <div class="text-sm text-zinc-400 flex gap-1 items-center">
+          <label for="threshold" class="block font-medium">
+            Threshold
+          </label>
+          <HoverCard openDelay={300} gutter={5}>
+            <HoverCard.Trigger>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+                />
+              </svg>
+            </HoverCard.Trigger>
+            <HoverCard.Portal>
+              <HoverCard.Content>
+                <p class="bg-zinc-900 max-w-md p-4 rounded-md text-zinc-400 border border-zinc-600">
+                  Threshold value to be used in the binarization process
+                  (0-255).
+                </p>
+              </HoverCard.Content>
+            </HoverCard.Portal>
+          </HoverCard>
+        </div>
         <input
           id="threshold"
           value={store.parameters.threshold}
@@ -156,12 +185,37 @@ export default function Tools({ canvas }: ToolsProps) {
         />
       </Show>
       <Show when={store.selectedAlgorithm.parameters["contrast-limit"]}>
-        <label
-          for="contrastLimit"
-          class="block text-sm font-medium text-zinc-400"
-        >
-          Contrast Limit
-        </label>
+        <div class="text-sm text-zinc-400 flex gap-1 items-center">
+          <label for="contrastLimit" class="block font-medium">
+            Contrast Limit
+          </label>
+          <HoverCard openDelay={300} gutter={5}>
+            <HoverCard.Trigger>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+                />
+              </svg>
+            </HoverCard.Trigger>
+            <HoverCard.Portal>
+              <HoverCard.Content>
+                <p class="bg-zinc-900 max-w-md p-4 rounded-md text-zinc-400 border border-zinc-600">
+                  The maximum value of the contrast between the local mean and
+                  the local standard deviation.
+                </p>
+              </HoverCard.Content>
+            </HoverCard.Portal>
+          </HoverCard>
+        </div>
         <input
           id="contrastLimit"
           value={store.parameters["contrast-limit"]}
@@ -178,9 +232,37 @@ export default function Tools({ canvas }: ToolsProps) {
         />
       </Show>
       <Show when={store.selectedAlgorithm.parameters.k}>
-        <label for="k-value" class="block text-sm font-medium text-zinc-400">
-          k value
-        </label>
+        <div class="text-sm text-zinc-400 flex gap-1 items-center">
+          <label for="k-value" class="block font-medium">
+            k value
+          </label>
+          <HoverCard openDelay={300} gutter={5}>
+            <HoverCard.Trigger>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+                />
+              </svg>
+            </HoverCard.Trigger>
+            <HoverCard.Portal>
+              <HoverCard.Content>
+                <p class="bg-zinc-900 max-w-md p-4 rounded-md text-zinc-400 border border-zinc-600">
+                  Constant multiplier that controls the value of the threshold
+                  in the local window
+                </p>
+              </HoverCard.Content>
+            </HoverCard.Portal>
+          </HoverCard>
+        </div>
         <input
           id="k-value"
           value={store.parameters.k}
