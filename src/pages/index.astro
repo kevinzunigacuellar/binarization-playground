@@ -6,7 +6,7 @@ import Playground from "../components/Playground";
 const title = "Image binarization playground";
 const canonicalURL = new URL(Astro.url).href;
 const description =
-  "A playground to test different image binarization algorithm implementations in the browser using WebAssembly.";
+  "An online image binarization playground. Try different binarization algorithms and parameters to see how they affect the output.";
 const author = "Kevin Zuniga Cuellar";
 const twitter = "@kevinzunigacuel";
 const socialImageURL = new URL("/og.png", canonicalURL).href;
@@ -42,9 +42,9 @@ const imageAlt = "Image binarization playground";
     <meta name="robots" content="follow, index" />
     <meta name="author" content={author} />
     <script
-      defer
-      data-domain="binarization.kevinzunigacuellar.com"
-      src="https://plausible.io/js/script.js"
+      async
+      src="https://analytics.kevinzunigacuellar.com/script.js"
+      data-website-id="60a8bffe-121c-4d43-8b38-1fd546cd06e9"
     ></script>
   </head>
   <body class="bg-white flex flex-col w-full h-full">
