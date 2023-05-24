@@ -30,8 +30,7 @@ export default function DropZone({ canvas }: DropZoneProps) {
         ></path>
       </svg>
       <p class="mb-2 text-sm text-gray-400">
-        <span class="font-semibold text-gray-300">Click to upload</span> or drag
-        and drop
+        <span class="font-semibold text-gray-300">Click here to upload</span>
       </p>
       <p class="text-xs text-gray-400">PNG, JPG, JPEG</p>
 

@@ -30,6 +30,22 @@ export default function Tools({ canvas }: ToolsProps) {
     setStore("executionTime", time);
   };
 
+  const handleReset = () => {
+    setStore("imageData", "previewUrl", "");
+    setStore("fileData", "name", "");
+    setStore("executionTime", 0);
+    setStore("selectedAlgorithm", {
+      id: new Number(),
+      name: "",
+      parameters: {
+        window: false,
+        k: false,
+        threshold: false,
+        "contrast-limit": false,
+      },
+    });
+  };
+
   return (
     <div class="w-full sm:w-72 h-full p-4 sm:border-r border-zinc-700 bg-zinc-800 flex flex-col gap-2 order-2 sm:order-none">
       <Select onValueChange={handleSelect}>
@@ -283,6 +299,12 @@ export default function Tools({ canvas }: ToolsProps) {
         onClick={handleDownload}
       >
         Download
+      </button>
+      <button
+        class="inline-flex mt-2 items-center justify-center p-2 overflow-hidden text-sm font-medium text-zinc-200 hover:text-white rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-500 hover:to-blue-500 focus:ring-blue-300"
+        onClick={handleReset}
+      >
+        Reset
       </button>
       <Show when={store.executionTime > 0}>
         <p class="font-mono text-sm text-white">
